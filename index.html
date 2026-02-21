@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kassenbon Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Serif+Display&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0f14;
+  --surface: #161920;
+  --surface-hover: #1c2030;
+  --border: #2a2f42;
+  --text: #e8e8ec;
+  --text-dim: #8a8fa8;
+  --gold: #f0c040;
+  --green: #5de8b0;
+  --red: #f0705a;
+  --purple: #b07af0;
+  --cyan: #5ac8f0;
+  --orange: #f0a050;
+  --blue: #5a8af0;
+  --font-title: 'DM Serif Display', serif;
+  --font-mono: 'DM Mono', monospace;
+  --font-ui: 'Syne', sans-serif;
+  --radius: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Header ───────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header h1 {
+  font-family: var(--font-title);
+  font-size: 28px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.header-actions { display: flex; gap: 10px; }
+
+.btn {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #0d0f14;
+}
+.btn-primary:hover { background: #f5d060; transform: translateY(-1px); }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--surface-hover); border-color: var(--gold); }
+
+/* ── Main Container ───────────────────────────────── */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px 32px;
+}
+
+/* ── Stats Cards ──────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.stat-card:nth-child(1)::after { background: var(--gold); }
+.stat-card:nth-child(2)::after { background: var(--green); }
+.stat-card:nth-child(3)::after { background: var(--blue); }
+.stat-card:nth-child(4)::after { background: var(--red); }
+
+.stat-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.stat-sub {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.stat-card:nth-child(1) .stat-value { color: var(--gold); }
+.stat-card:nth-child(2) .stat-value { color: var(--green); }
+.stat-card:nth-child(3) .stat-value { color: var(--blue); }
+.stat-card:nth-child(4) .stat-value { color: var(--red); }
+
+/* ── Charts Grid ──────────────────────────────────── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.chart-title {
+  font-family: var(--font-title);
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+/* ── Category Bar Chart ───────────────────────────── */
+.bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bar-label {
+  width: 110px;
+  font-size: 13px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 22px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+  min-width: 2px;
+}
+
+.bar-value {
+  width: 70px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+/* ── SVG Charts ───────────────────────────────────── */
+.trend-chart svg, .donut-chart svg {
+  display: block;
+  width: 100%;
+}
+
+.donut-container {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-pct {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  font-size: 12px;
+  margin-left: auto;
+  padding-left: 12px;
+}
+
+/* ── Tips Card ────────────────────────────────────── */
+.tips-list { list-style: none; }
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.tip-item:last-child { border-bottom: none; }
+
+.tip-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(240,192,64,0.1);
+  border-radius: 6px;
+  color: var(--gold);
+}
+
+.tip-saving {
+  font-family: var(--font-mono);
+  color: var(--green);
+  font-weight: 500;
+}
+
+/* ── Receipts Table ───────────────────────────────── */
+.table-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 28px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.table-header h2 {
+  font-family: var(--font-title);
+  font-size: 18px;
+}
+
+.receipts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.receipts-table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.receipts-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(42,47,66,0.5);
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.receipts-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+.store-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.store-Lidl { background: rgba(240,192,64,0.15); color: var(--gold); }
+.store-REWE { background: rgba(240,112,90,0.15); color: var(--red); }
+.store-Aldi { background: rgba(93,232,176,0.15); color: var(--green); }
+.store-Edeka { background: rgba(176,122,240,0.15); color: var(--purple); }
+.store-Netto { background: rgba(90,200,240,0.15); color: var(--cyan); }
+.store-Penny { background: rgba(240,160,80,0.15); color: var(--orange); }
+.store-Kaufland { background: rgba(240,112,90,0.15); color: var(--red); }
+.store-DM { background: rgba(93,232,176,0.15); color: var(--green); }
+.store-Sonstige { background: rgba(138,143,168,0.15); color: var(--text-dim); }
+
+.discount-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: rgba(93,232,176,0.12);
+  color: var(--green);
+}
+
+.amount {
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.items-preview {
+  color: var(--text-dim);
+  font-size: 13px;
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-delete {
+  background: none;
+  border: 1px solid rgba(240,112,90,0.3);
+  color: var(--red);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: all 0.2s;
+}
+.btn-delete:hover {
+  background: rgba(240,112,90,0.15);
+  border-color: var(--red);
+}
+
+/* ── Modal ────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 640px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 32px;
+  transform: translateY(20px);
+  transition: transform 0.25s;
+}
+
+.modal-overlay.active .modal { transform: translateY(0); }
+
+.modal h2 {
+  font-family: var(--font-title);
+  font-size: 22px;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+
+.form-group label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus { border-color: var(--gold); }
+
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238a8fa8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+.items-section {
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.items-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 0.6fr 0.8fr 36px;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.item-row input,
+.item-row select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  outline: none;
+}
+
+.item-row input:focus,
+.item-row select:focus { border-color: var(--gold); }
+
+.btn-remove-item {
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: 1px solid rgba(240,112,90,0.3);
+  color: var(--red);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.btn-remove-item:hover { background: rgba(240,112,90,0.15); }
+
+.btn-add-item {
+  background: none;
+  border: 1px dashed var(--border);
+  color: var(--text-dim);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  margin-top: 4px;
+  transition: all 0.2s;
+}
+.btn-add-item:hover { border-color: var(--gold); color: var(--gold); }
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Empty State ──────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-dim);
+}
+
+.empty-state span { font-size: 40px; display: block; margin-bottom: 12px; }
+
+/* ── Scrollbar ────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 1024px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .charts-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .header { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
+  .header h1 { font-size: 22px; }
+  .container { padding: 20px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-value { font-size: 24px; }
+  .modal { width: 95%; padding: 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  .item-row { grid-template-columns: 1fr 1fr; }
+  .item-row input:first-child { grid-column: 1 / -1; }
+  .donut-container { flex-direction: column; }
+  .receipts-table { font-size: 13px; }
+  .receipts-table th:nth-child(4),
+  .receipts-table td:nth-child(4) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ────────────────────────────────────── -->
+<header class="header">
+  <h1>Kassenbon Tracker</h1>
+  <div class="header-actions">
+    <button class="btn btn-secondary" onclick="exportCSV()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      CSV Export
+    </button>
+    <button class="btn btn-primary" onclick="openModal()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      Bon erfassen
+    </button>
+  </div>
+</header>
+
+<!-- ── Main Content ──────────────────────────────── -->
+<main class="container">
+
+  <!-- Stats -->
+  <section class="stats-grid" id="statsGrid"></section>
+
+  <!-- Charts -->
+  <section class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Ausgaben nach Kategorie</div>
+      <div id="categoryBars"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Monatlicher Trend</div>
+      <div class="trend-chart" id="trendChart"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Supermarkt-Verteilung</div>
+      <div class="donut-chart" id="donutChart"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Spartipps</div>
+      <div id="tipsContainer"></div>
+    </div>
+  </section>
+
+  <!-- Receipts Table -->
+  <section class="table-section">
+    <div class="table-header">
+      <h2>Kassenbons</h2>
+      <span id="receiptCount" style="font-family:var(--font-mono);font-size:13px;color:var(--text-dim)"></span>
+    </div>
+    <div id="receiptsTableContainer"></div>
+  </section>
+
+</main>
+
+<!-- ── Modal ──────────────────────────────────────── -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h2>Neuen Bon erfassen</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Datum</label>
+        <input type="date" id="inputDate">
+      </div>
+      <div class="form-group">
+        <label>Supermarkt</label>
+        <select id="inputStore">
+          <option value="Lidl">Lidl</option>
+          <option value="REWE">REWE</option>
+          <option value="Aldi">Aldi</option>
+          <option value="Edeka">Edeka</option>
+          <option value="Penny">Penny</option>
+          <option value="Netto">Netto</option>
+          <option value="Kaufland">Kaufland</option>
+          <option value="DM">DM</option>
+          <option value="Sonstige">Sonstige</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Gesamtbetrag (&euro;)</label>
+        <input type="number" step="0.01" min="0" id="inputTotal" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <label>Preisvorteil / Rabatt (&euro;)</label>
+        <input type="number" step="0.01" min="0" id="inputDiscount" placeholder="0.00" value="0">
+      </div>
+    </div>
+
+    <div class="items-section">
+      <h3>Artikel</h3>
+      <div id="itemRows"></div>
+      <button class="btn-add-item" onclick="addItemRow()">+ Artikel hinzuf&uuml;gen</button>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Abbrechen</button>
+      <button class="btn btn-primary" onclick="saveReceipt()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   DATA
+   ══════════════════════════════════════════════════════ */
+const CATEGORIES = [
+  'Lebensmittel', 'Getränke', 'Milchprodukte', 'Backwaren',
+  'Süßigkeiten', 'Tiefkühl', 'Haushalt', 'Hygiene', 'Sonstiges'
+];
+
+const CATEGORY_COLORS = {
+  'Lebensmittel': '#5de8b0',
+  'Getränke':     '#5ac8f0',
+  'Milchprodukte':'#f0c040',
+  'Backwaren':    '#f0a050',
+  'Süßigkeiten':  '#f0705a',
+  'Tiefkühl':     '#b07af0',
+  'Haushalt':     '#5a8af0',
+  'Hygiene':      '#e878c0',
+  'Sonstiges':    '#8a8fa8'
+};
+
+const STORE_COLORS = {
+  'Lidl':     '#f0c040',
+  'REWE':     '#f0705a',
+  'Aldi':     '#5de8b0',
+  'Edeka':    '#b07af0',
+  'Netto':    '#5ac8f0',
+  'Penny':    '#f0a050',
+  'Kaufland': '#f0705a',
+  'DM':       '#5de8b0',
+  'Sonstige': '#8a8fa8'
+};
+
+const SAVINGS_RATES = {
+  'Getränke':      { rate: 0.30, tip: 'Discounter-Wasser & Eigenmarken statt Markengetränke' },
+  'Milchprodukte': { rate: 0.25, tip: 'Eigenmarken bei Milch, Käse & Joghurt wählen' },
+  'Lebensmittel':  { rate: 0.15, tip: 'Wochenangebote nutzen & saisonale Produkte kaufen' },
+  'Backwaren':     { rate: 0.30, tip: 'Abends einkaufen für reduzierte Backwaren' },
+  'Süßigkeiten':   { rate: 0.35, tip: 'Eigenmarken bei Schokolade & Snacks bevorzugen' }
+};
+
+/* Hardcoded seed receipts */
+const HARDCODED_RECEIPTS = [
+  {
+    id: 1,
+    date: '2026-02-21',
+    store: 'Lidl',
+    total: 24.43,
+    discount: 0.96,
+    items: [
+      { name: 'Apfel rot süß', cat: 'Lebensmittel', qty: 1, price: 1.59 },
+      { name: 'Gouda Scheiben', cat: 'Milchprodukte', qty: 1, price: 2.45 },
+      { name: 'Basmati Reis', cat: 'Lebensmittel', qty: 1, price: 2.99 },
+      { name: 'Eier 10er Freilandhaltung', cat: 'Lebensmittel', qty: 1, price: 2.99 },
+      { name: 'Wasser still', cat: 'Getränke', qty: 6, price: 1.74 },
+      { name: 'Cola 0% Zucker 0,33l', cat: 'Getränke', qty: 4, price: 1.56 },
+      { name: 'Vollkorn Sandwich', cat: 'Backwaren', qty: 1, price: 1.09 },
+      { name: 'Nussecke', cat: 'Süßigkeiten', qty: 1, price: 2.49 },
+      { name: 'Pap. Mag. d.Winterberg', cat: 'Lebensmittel', qty: 1, price: 5.99 }
+    ]
+  },
+  {
+    id: 2,
+    date: '2026-02-18',
+    store: 'Netto',
+    total: 7.65,
+    discount: 0.50,
+    items: [
+      { name: 'P&B Cremeseife M+H NFB 1L', cat: 'Hygiene', qty: 1, price: 0.99 },
+      { name: 'Vegola Sonnenblumenöl 1L', cat: 'Lebensmittel', qty: 1, price: 1.69 },
+      { name: 'Amicelli Röllchen 200g', cat: 'Süßigkeiten', qty: 1, price: 3.49 },
+      { name: 'BO Käse Laugenbreze', cat: 'Backwaren', qty: 1, price: 1.98 }
+    ]
+  }
+];
+
+/* Runtime data array */
+let receipts = [];
+let nextId = 1;
+
+function initData() {
+  receipts = HARDCODED_RECEIPTS.map(r => ({ ...r, items: r.items.map(i => ({...i})) }));
+  nextId = Math.max(...receipts.map(r => r.id)) + 1;
+}
+
+/* ══════════════════════════════════════════════════════
+   HELPERS
+   ══════════════════════════════════════════════════════ */
+function fmt(n) { return n.toFixed(2).replace('.', ',') + ' \u20ac'; }
+function fmtPct(n) { return (n * 100).toFixed(1).replace('.', ',') + ' %'; }
+function formatDate(d) {
+  const [y, m, day] = d.split('-');
+  return `${day}.${m}.${y}`;
+}
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+/* ══════════════════════════════════════════════════════
+   STATS
+   ══════════════════════════════════════════════════════ */
+function renderStats() {
+  const totalSpent = receipts.reduce((s, r) => s + r.total, 0);
+  const totalDiscount = receipts.reduce((s, r) => s + r.discount, 0);
+  const count = receipts.length;
+  const avg = count > 0 ? totalSpent / count : 0;
+  const pctSaved = totalSpent + totalDiscount > 0
+    ? totalDiscount / (totalSpent + totalDiscount) : 0;
+
+  /* Savings potential */
+  const catTotals = {};
+  receipts.forEach(r => r.items.forEach(i => {
+    catTotals[i.cat] = (catTotals[i.cat] || 0) + i.price * i.qty;
+  }));
+  let potential = 0;
+  Object.entries(catTotals).forEach(([cat, total]) => {
+    if (SAVINGS_RATES[cat]) potential += total * SAVINGS_RATES[cat].rate;
+  });
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Gesamtausgaben</div>
+      <div class="stat-value">${fmt(totalSpent)}</div>
+      <div class="stat-sub">${count} Bon${count !== 1 ? 's' : ''}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Gespart</div>
+      <div class="stat-value">${fmt(totalDiscount)}</div>
+      <div class="stat-sub">${fmtPct(pctSaved)} gespart</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">&Oslash; pro Einkauf</div>
+      <div class="stat-value">${fmt(avg)}</div>
+      <div class="stat-sub">Durchschnitt</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Sparpotenzial</div>
+      <div class="stat-value">${fmt(potential)}</div>
+      <div class="stat-sub">m&ouml;gliche Ersparnis</div>
+    </div>
+  `;
+}
+
+/* ══════════════════════════════════════════════════════
+   CATEGORY BAR CHART
+   ══════════════════════════════════════════════════════ */
+function renderCategoryBars() {
+  const catTotals = {};
+  receipts.forEach(r => r.items.forEach(i => {
+    catTotals[i.cat] = (catTotals[i.cat] || 0) + i.price * i.qty;
+  }));
+
+  const entries = Object.entries(catTotals).sort((a, b) => b[1] - a[1]);
+  const maxVal = entries.length > 0 ? entries[0][1] : 1;
+
+  if (entries.length === 0) {
+    document.getElementById('categoryBars').innerHTML =
+      '<div class="empty-state"><span>&#128202;</span>Noch keine Daten</div>';
+    return;
+  }
+
+  document.getElementById('categoryBars').innerHTML = entries.map(([cat, total]) => `
+    <div class="bar-row">
+      <span class="bar-label">${escapeHtml(cat)}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${(total/maxVal*100).toFixed(1)}%;background:${CATEGORY_COLORS[cat]||'#8a8fa8'}"></div>
+      </div>
+      <span class="bar-value">${fmt(total)}</span>
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════════════════
+   MONTHLY TREND LINE CHART (SVG)
+   ══════════════════════════════════════════════════════ */
+function renderTrendChart() {
+  const monthly = {};
+  receipts.forEach(r => {
+    const key = r.date.slice(0, 7);
+    monthly[key] = (monthly[key] || 0) + r.total;
+  });
+
+  const months = Object.keys(monthly).sort();
+  if (months.length === 0) {
+    document.getElementById('trendChart').innerHTML =
+      '<div class="empty-state"><span>&#128200;</span>Noch keine Daten</div>';
+    return;
+  }
+
+  /* If only one month, duplicate for visual */
+  if (months.length === 1) {
+    const k = months[0];
+    months.unshift(k);
+  }
+
+  const values = months.map(m => monthly[m] || 0);
+  const maxVal = Math.max(...values, 1);
+  const W = 500, H = 200, padX = 50, padY = 30;
+  const plotW = W - padX * 2, plotH = H - padY * 2;
+
+  const points = values.map((v, i) => {
+    const x = padX + (months.length > 1 ? (i / (months.length - 1)) * plotW : plotW / 2);
+    const y = padY + plotH - (v / maxVal) * plotH;
+    return { x, y, v, label: months[i] };
+  });
+
+  const lineD = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+  const areaD = lineD + ` L${points[points.length-1].x},${padY+plotH} L${points[0].x},${padY+plotH} Z`;
+
+  /* Y-axis labels */
+  const ySteps = 4;
+  const yLabels = Array.from({ length: ySteps + 1 }, (_, i) => {
+    const val = (maxVal / ySteps) * i;
+    const y = padY + plotH - (val / maxVal) * plotH;
+    return `<text x="${padX - 8}" y="${y + 4}" text-anchor="end" fill="#8a8fa8" font-size="11" font-family="DM Mono">${val.toFixed(0)}</text>
+            <line x1="${padX}" y1="${y}" x2="${W - padX}" y2="${y}" stroke="#2a2f42" stroke-width="0.5"/>`;
+  }).join('');
+
+  /* X-axis labels */
+  const xLabels = points.map(p => {
+    const [y, m] = p.label.split('-');
+    return `<text x="${p.x}" y="${H - 5}" text-anchor="middle" fill="#8a8fa8" font-size="11" font-family="DM Mono">${m}/${y.slice(2)}</text>`;
+  }).join('');
+
+  /* Dots */
+  const dots = points.map(p =>
+    `<circle cx="${p.x}" cy="${p.y}" r="4" fill="#f0c040" stroke="#161920" stroke-width="2"/>
+     <text x="${p.x}" y="${p.y - 12}" text-anchor="middle" fill="#f0c040" font-size="11" font-family="DM Mono">${fmt(p.v)}</text>`
+  ).join('');
+
+  document.getElementById('trendChart').innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+      ${yLabels}
+      ${xLabels}
+      <defs>
+        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f0c040" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#f0c040" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d="${areaD}" fill="url(#areaGrad)"/>
+      <path d="${lineD}" fill="none" stroke="#f0c040" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      ${dots}
+    </svg>
+  `;
+}
+
+/* ══════════════════════════════════════════════════════
+   DONUT CHART (SVG)
+   ══════════════════════════════════════════════════════ */
+function renderDonutChart() {
+  const storeTotals = {};
+  receipts.forEach(r => {
+    storeTotals[r.store] = (storeTotals[r.store] || 0) + r.total;
+  });
+
+  const entries = Object.entries(storeTotals).sort((a, b) => b[1] - a[1]);
+  const grandTotal = entries.reduce((s, e) => s + e[1], 0);
+
+  if (entries.length === 0) {
+    document.getElementById('donutChart').innerHTML =
+      '<div class="empty-state"><span>&#128293;</span>Noch keine Daten</div>';
+    return;
+  }
+
+  const cx = 100, cy = 100, R = 80, r = 52;
+  let cumAngle = -Math.PI / 2;
+  const arcs = entries.map(([store, total]) => {
+    const pct = total / grandTotal;
+    const startAngle = cumAngle;
+    const endAngle = cumAngle + pct * 2 * Math.PI;
+    cumAngle = endAngle;
+
+    const largeArc = pct > 0.5 ? 1 : 0;
+    const x1o = cx + R * Math.cos(startAngle);
+    const y1o = cy + R * Math.sin(startAngle);
+    const x2o = cx + R * Math.cos(endAngle - 0.001);
+    const y2o = cy + R * Math.sin(endAngle - 0.001);
+    const x1i = cx + r * Math.cos(endAngle - 0.001);
+    const y1i = cy + r * Math.sin(endAngle - 0.001);
+    const x2i = cx + r * Math.cos(startAngle);
+    const y2i = cy + r * Math.sin(startAngle);
+
+    const d = `M${x1o},${y1o} A${R},${R} 0 ${largeArc} 1 ${x2o},${y2o} L${x1i},${y1i} A${r},${r} 0 ${largeArc} 0 ${x2i},${y2i} Z`;
+    return { store, total, pct, d, color: STORE_COLORS[store] || '#8a8fa8' };
+  });
+
+  const paths = arcs.map(a =>
+    `<path d="${a.d}" fill="${a.color}" stroke="#161920" stroke-width="2"/>`
+  ).join('');
+
+  const legend = arcs.map(a => `
+    <div class="legend-item">
+      <span class="legend-dot" style="background:${a.color}"></span>
+      <span>${escapeHtml(a.store)}</span>
+      <span class="legend-pct">${fmtPct(a.pct)}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('donutChart').innerHTML = `
+    <div class="donut-container">
+      <svg viewBox="0 0 200 200" width="180" height="180" style="flex-shrink:0">
+        ${paths}
+        <text x="${cx}" y="${cy - 6}" text-anchor="middle" fill="#e8e8ec" font-family="DM Mono" font-size="16" font-weight="500">${fmt(grandTotal)}</text>
+        <text x="${cx}" y="${cy + 14}" text-anchor="middle" fill="#8a8fa8" font-family="Syne" font-size="10">Gesamt</text>
+      </svg>
+      <div class="donut-legend">${legend}</div>
+    </div>
+  `;
+}
+
+/* ══════════════════════════════════════════════════════
+   SAVINGS TIPS
+   ══════════════════════════════════════════════════════ */
+function renderTips() {
+  const catTotals = {};
+  receipts.forEach(r => r.items.forEach(i => {
+    catTotals[i.cat] = (catTotals[i.cat] || 0) + i.price * i.qty;
+  }));
+
+  const tips = [];
+  Object.entries(SAVINGS_RATES).forEach(([cat, info]) => {
+    const spent = catTotals[cat] || 0;
+    if (spent > 0) {
+      const saving = spent * info.rate;
+      tips.push({ cat, tip: info.tip, saving, spent });
+    }
+  });
+
+  tips.sort((a, b) => b.saving - a.saving);
+
+  if (tips.length === 0) {
+    document.getElementById('tipsContainer').innerHTML =
+      '<div class="empty-state"><span>&#128161;</span>Tipps werden basierend auf deinen Ausgaben generiert</div>';
+    return;
+  }
+
+  document.getElementById('tipsContainer').innerHTML = `
+    <ul class="tips-list">
+      ${tips.map(t => `
+        <li class="tip-item">
+          <div class="tip-icon">&#9733;</div>
+          <div>
+            <strong>${escapeHtml(t.cat)}</strong>: ${escapeHtml(t.tip)}<br>
+            <span class="tip-saving">Sparpotenzial: ${fmt(t.saving)}</span>
+            <span style="color:var(--text-dim);font-size:12px;margin-left:6px">(${fmtPct(SAVINGS_RATES[t.cat].rate)} von ${fmt(t.spent)})</span>
+          </div>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+}
+
+/* ══════════════════════════════════════════════════════
+   RECEIPTS TABLE
+   ══════════════════════════════════════════════════════ */
+function renderTable() {
+  const sorted = [...receipts].sort((a, b) => b.date.localeCompare(a.date));
+  document.getElementById('receiptCount').textContent = `${sorted.length} Bon${sorted.length !== 1 ? 's' : ''}`;
+
+  if (sorted.length === 0) {
+    document.getElementById('receiptsTableContainer').innerHTML =
+      '<div class="empty-state"><span>&#128483;</span>Noch keine Kassenbons erfasst</div>';
+    return;
+  }
+
+  const rows = sorted.map(r => {
+    const preview = r.items.slice(0, 3).map(i => i.name).join(', ')
+      + (r.items.length > 3 ? ` (+${r.items.length - 3})` : '');
+    const discountHtml = r.discount > 0
+      ? `<span class="discount-badge">-${fmt(r.discount)}</span>` : '&mdash;';
+    return `
+      <tr>
+        <td style="font-family:var(--font-mono);font-size:13px">${formatDate(r.date)}</td>
+        <td><span class="store-badge store-${r.store}">${escapeHtml(r.store)}</span></td>
+        <td class="items-preview" title="${escapeHtml(r.items.map(i=>i.name).join(', '))}">${escapeHtml(preview)}</td>
+        <td>${discountHtml}</td>
+        <td class="amount" style="color:var(--gold)">${fmt(r.total)}</td>
+        <td><button class="btn-delete" onclick="deleteReceipt(${r.id})">L&ouml;schen</button></td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById('receiptsTableContainer').innerHTML = `
+    <table class="receipts-table">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Supermarkt</th>
+          <th>Artikel</th>
+          <th>Preisvorteil</th>
+          <th>Gesamt</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+/* ══════════════════════════════════════════════════════
+   MODAL & FORM
+   ══════════════════════════════════════════════════════ */
+function openModal() {
+  document.getElementById('inputDate').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('inputStore').value = 'Lidl';
+  document.getElementById('inputTotal').value = '';
+  document.getElementById('inputDiscount').value = '0';
+  document.getElementById('itemRows').innerHTML = '';
+  addItemRow();
+  addItemRow();
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+function addItemRow() {
+  const container = document.getElementById('itemRows');
+  const div = document.createElement('div');
+  div.className = 'item-row';
+  div.innerHTML = `
+    <input type="text" placeholder="Artikelname" class="item-name">
+    <select class="item-cat">
+      ${CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}
+    </select>
+    <input type="number" min="1" value="1" class="item-qty" placeholder="Mng.">
+    <input type="number" step="0.01" min="0" class="item-price" placeholder="Preis">
+    <button class="btn-remove-item" onclick="this.parentElement.remove()" title="Entfernen">&times;</button>
+  `;
+  container.appendChild(div);
+}
+
+function saveReceipt() {
+  const date = document.getElementById('inputDate').value;
+  const store = document.getElementById('inputStore').value;
+  const total = parseFloat(document.getElementById('inputTotal').value);
+  const discount = parseFloat(document.getElementById('inputDiscount').value) || 0;
+
+  if (!date || !store || isNaN(total) || total <= 0) {
+    alert('Bitte Datum, Supermarkt und Gesamtbetrag eingeben.');
+    return;
+  }
+
+  const items = [];
+  document.querySelectorAll('#itemRows .item-row').forEach(row => {
+    const name = row.querySelector('.item-name').value.trim();
+    const cat = row.querySelector('.item-cat').value;
+    const qty = parseInt(row.querySelector('.item-qty').value) || 1;
+    const price = parseFloat(row.querySelector('.item-price').value) || 0;
+    if (name && price > 0) {
+      items.push({ name, cat, qty, price });
+    }
+  });
+
+  receipts.push({ id: nextId++, date, store, total, discount, items });
+  closeModal();
+  renderAll();
+}
+
+function deleteReceipt(id) {
+  if (!confirm('Bon wirklich löschen?')) return;
+  receipts = receipts.filter(r => r.id !== id);
+  renderAll();
+}
+
+/* ══════════════════════════════════════════════════════
+   CSV EXPORT
+   ══════════════════════════════════════════════════════ */
+function exportCSV() {
+  if (receipts.length === 0) {
+    alert('Keine Bons zum Exportieren vorhanden.');
+    return;
+  }
+
+  const BOM = '\uFEFF';
+  const header = 'Datum;Supermarkt;Artikel;Kategorie;Menge;Preis;Bon-Gesamt;Preisvorteil';
+  const lines = [header];
+
+  const sorted = [...receipts].sort((a, b) => b.date.localeCompare(a.date));
+  sorted.forEach(r => {
+    if (r.items.length === 0) {
+      lines.push(`${formatDate(r.date)};${r.store};;;;;"${r.total.toFixed(2).replace('.', ',')}";"${r.discount.toFixed(2).replace('.', ',')}"`);
+    } else {
+      r.items.forEach(i => {
+        lines.push([
+          formatDate(r.date),
+          r.store,
+          `"${i.name}"`,
+          i.cat,
+          i.qty,
+          `"${(i.price * i.qty).toFixed(2).replace('.', ',')}"`,
+          `"${r.total.toFixed(2).replace('.', ',')}"`,
+          `"${r.discount.toFixed(2).replace('.', ',')}"`
+        ].join(';'));
+      });
+    }
+  });
+
+  const blob = new Blob([BOM + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `kassenbons_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ══════════════════════════════════════════════════════
+   RENDER ALL
+   ══════════════════════════════════════════════════════ */
+function renderAll() {
+  renderStats();
+  renderCategoryBars();
+  renderTrendChart();
+  renderDonutChart();
+  renderTips();
+  renderTable();
+}
+
+/* ══════════════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════════════ */
+initData();
+renderAll();
+</script>
+</body>
+</html>
