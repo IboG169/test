@@ -1,0 +1,383 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA000001 /* YallaFitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001; };
+		AA000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100002; };
+		AA000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA100003; };
+		AA000004 /* YallaFitModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AA100004; };
+		AA000005 /* DailyEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100005; };
+		AA000006 /* DailyEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100006; };
+		AA000007 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100007; };
+		AA000008 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100008; };
+		AA000009 /* CheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100009; };
+		AA000010 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100010; };
+		AA000011 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100011; };
+		AA000012 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100012; };
+		AA000013 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100013; };
+		AA000014 /* CheckInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100014; };
+		AA000015 /* ProgressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100015; };
+		AA000016 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100016; };
+		AA000017 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100017; };
+		AA000018 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100018; };
+		AA000019 /* MotivationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100019; };
+		AA000020 /* CSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100020; };
+		AA000021 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100021; };
+		AA000022 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100022; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		AA200001 /* YallaFit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YallaFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA100001 /* YallaFitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YallaFitApp.swift; sourceTree = "<group>"; };
+		AA100002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AA100003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AA100004 /* YallaFitModel.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; path = YallaFitModel.xcdatamodeld; sourceTree = "<group>"; };
+		AA100005 /* DailyEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
+		AA100006 /* DailyEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		AA100007 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		AA100008 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		AA100009 /* CheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInView.swift; sourceTree = "<group>"; };
+		AA100010 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
+		AA100011 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		AA100012 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AA100013 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		AA100014 /* CheckInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInViewModel.swift; sourceTree = "<group>"; };
+		AA100015 /* ProgressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewModel.swift; sourceTree = "<group>"; };
+		AA100016 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		AA100017 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		AA100018 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		AA100019 /* MotivationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationEngine.swift; sourceTree = "<group>"; };
+		AA100020 /* CSVExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporter.swift; sourceTree = "<group>"; };
+		AA100021 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
+		AA100022 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA300001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA400001 = {
+			isa = PBXGroup;
+			children = (
+				AA400002 /* YallaFit */,
+				AA400007 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AA400002 /* YallaFit */ = {
+			isa = PBXGroup;
+			children = (
+				AA100001 /* YallaFitApp.swift */,
+				AA100002 /* ContentView.swift */,
+				AA400003 /* Models */,
+				AA400004 /* Views */,
+				AA400005 /* ViewModels */,
+				AA400006 /* Utilities */,
+				AA100003 /* Assets.xcassets */,
+				AA100004 /* YallaFitModel.xcdatamodeld */,
+			);
+			path = YallaFit;
+			sourceTree = "<group>";
+		};
+		AA400003 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AA100005 /* DailyEntry+CoreDataClass.swift */,
+				AA100006 /* DailyEntry+CoreDataProperties.swift */,
+				AA100007 /* PersistenceController.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AA400004 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA100008 /* DashboardView.swift */,
+				AA100009 /* CheckInView.swift */,
+				AA100010 /* ProgressView.swift */,
+				AA100011 /* HistoryView.swift */,
+				AA100012 /* SettingsView.swift */,
+				AA100021 /* ConfettiView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AA400005 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				AA100013 /* DashboardViewModel.swift */,
+				AA100014 /* CheckInViewModel.swift */,
+				AA100015 /* ProgressViewModel.swift */,
+				AA100016 /* HistoryViewModel.swift */,
+				AA100017 /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		AA400006 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				AA100018 /* NotificationManager.swift */,
+				AA100019 /* MotivationEngine.swift */,
+				AA100020 /* CSVExporter.swift */,
+				AA100022 /* Theme.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		AA400007 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA200001 /* YallaFit.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA500001 /* YallaFit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA700002 /* Build configuration list for PBXNativeTarget "YallaFit" */;
+			buildPhases = (
+				AA500002 /* Sources */,
+				AA300001 /* Frameworks */,
+				AA500003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YallaFit;
+			productName = YallaFit;
+			productReference = AA200001 /* YallaFit.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA600001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					AA500001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = AA700001 /* Build configuration list for PBXProject "YallaFit" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = de;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				de,
+				Base,
+			);
+			mainGroup = AA400001;
+			productRefGroup = AA400007 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA500001 /* YallaFit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA500003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000003 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA500002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001 /* YallaFitApp.swift in Sources */,
+				AA000002 /* ContentView.swift in Sources */,
+				AA000004 /* YallaFitModel.xcdatamodeld in Sources */,
+				AA000005 /* DailyEntry+CoreDataClass.swift in Sources */,
+				AA000006 /* DailyEntry+CoreDataProperties.swift in Sources */,
+				AA000007 /* PersistenceController.swift in Sources */,
+				AA000008 /* DashboardView.swift in Sources */,
+				AA000009 /* CheckInView.swift in Sources */,
+				AA000010 /* ProgressView.swift in Sources */,
+				AA000011 /* HistoryView.swift in Sources */,
+				AA000012 /* SettingsView.swift in Sources */,
+				AA000013 /* DashboardViewModel.swift in Sources */,
+				AA000014 /* CheckInViewModel.swift in Sources */,
+				AA000015 /* ProgressViewModel.swift in Sources */,
+				AA000016 /* HistoryViewModel.swift in Sources */,
+				AA000017 /* SettingsViewModel.swift in Sources */,
+				AA000018 /* NotificationManager.swift in Sources */,
+				AA000019 /* MotivationEngine.swift in Sources */,
+				AA000020 /* CSVExporter.swift in Sources */,
+				AA000021 /* ConfettiView.swift in Sources */,
+				AA000022 /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AA800001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AA800002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AA800003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = YallaFit;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yallafit.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA800004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = YallaFit;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yallafit.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA700001 /* Build configuration list for PBXProject "YallaFit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA800001 /* Debug */,
+				AA800002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA700002 /* Build configuration list for PBXNativeTarget "YallaFit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA800003 /* Debug */,
+				AA800004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = AA600001 /* Project object */;
+}
