@@ -167,35 +167,38 @@ Gib ein JSON mit diesen Feldern zurück:
 # ── CLAUDE API ──────────────────────────────────────────────────────────────────
 
 def generate_content_with_claude(name: str, branche: str, city: str, extra: str = "") -> dict:
-    """Ruft Claude API auf um Inhalte zu generieren."""
+    """Versucht Claude API; fällt auf Platzhalter zurück wenn kein Key da ist.
+
+    EMPFOHLENER WEG: Nutze stattdessen generate_from_json() mit Inhalten,
+    die du direkt in einem Claude-Chat (claude.ai / Claude Code) generiert hast.
+    Dazu einfach den Prompt aus BRANCHENCONFIG[branche]['user_prompt_template']
+    in Claude einfügen und das JSON hier als --json-file übergeben.
+    """
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        print("  ℹ️  Kein API-Key — nutze Platzhalter-Inhalte.")
+        print("  💡 Tipp: Generiere Inhalte direkt in Claude und übergib sie mit --json-file")
+        return get_placeholder_content(branche)
+
     try:
         import anthropic
     except ImportError:
-        print("⚠️  anthropic-Paket fehlt. Installiere mit: pip install anthropic")
-        return get_placeholder_content(branche)
-
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("⚠️  ANTHROPIC_API_KEY nicht gesetzt. Nutze Platzhalter-Inhalte.")
+        print("⚠️  anthropic-Paket fehlt. Nutze Platzhalter.")
         return get_placeholder_content(branche)
 
     config = BRANCHENCONFIG[branche]
     client = anthropic.Anthropic(api_key=api_key)
-
     user_prompt = config["user_prompt_template"].format(
         name=name, city=city, extra=extra or branche
     )
-
-    print(f"  🤖 Generiere Inhalte mit Claude für '{name}'...")
+    print(f"  🤖 Generiere Inhalte mit Claude API für '{name}'...")
     message = client.messages.create(
         model="claude-opus-4-8",
         max_tokens=1500,
         system=config["system_prompt"],
         messages=[{"role": "user", "content": user_prompt}]
     )
-
     raw = message.content[0].text.strip()
-    # JSON aus der Antwort extrahieren
     json_match = re.search(r'\{.*\}', raw, re.DOTALL)
     if json_match:
         return json.loads(json_match.group())
@@ -352,7 +355,8 @@ def deploy_to_vercel(demo_dir: Path, project_name: str) -> str | None:
 def generate_demo(name: str, branche: str, city: str, phone: str,
                   email: str, address: str, extra: str = "",
                   higgsfield_video: str | None = None,
-                  deploy: bool = False) -> Path:
+                  deploy: bool = False,
+                  preloaded_content: dict | None = None) -> Path:
 
     print(f"\n🏗️  Generiere Demo für '{name}' ({branche}, {city})")
 
@@ -365,8 +369,12 @@ def generate_demo(name: str, branche: str, city: str, phone: str,
     output_dir = demos_dir / slug
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # 1. Inhalte generieren
-    content = generate_content_with_claude(name, branche, city, extra)
+    # 1. Inhalte: vorgeladene nehmen (aus Claude-Chat) oder API aufrufen
+    if preloaded_content:
+        content = preloaded_content
+        print(f"  ✅ Inhalte aus JSON-Datei geladen")
+    else:
+        content = generate_content_with_claude(name, branche, city, extra)
 
     # 2. Alle Template-Variablen zusammenstellen
     year = datetime.now().year
@@ -430,7 +438,17 @@ def generate_demo(name: str, branche: str, city: str, phone: str,
 # ── CLI ─────────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="Demo-Website-Generator")
+    parser = argparse.ArgumentParser(
+        description="Demo-Website-Generator",
+        epilog="""
+Empfohlener Workflow (ohne API-Key):
+  1. Öffne Claude.ai oder Claude Code
+  2. Frage: "Generiere Website-Inhalte für [Name] in [Stadt]"
+  3. Speichere das JSON als content.json
+  4. python generate.py --name "..." --branche restaurant --city Berlin \\
+                        --json-file content.json --deploy
+"""
+    )
     parser.add_argument("--name", required=True, help="Name des Unternehmens")
     parser.add_argument("--branche", required=True,
                         choices=["restaurant", "handwerk", "shop", "kanzlei"])
@@ -443,7 +461,16 @@ def main():
     parser.add_argument("--video", default=None, help="Pfad zu Higgsfield-Video (.mp4)")
     parser.add_argument("--deploy", action="store_true",
                         help="Automatisch zu Vercel deployen")
+    parser.add_argument("--json-file", default=None,
+                        help="Pfad zu JSON-Datei mit Inhalten (aus Claude-Chat generiert)")
     args = parser.parse_args()
+
+    # JSON aus Datei laden wenn angegeben (kein API-Key nötig)
+    extra_content = {}
+    if args.json_file:
+        with open(args.json_file, encoding="utf-8") as f:
+            extra_content = json.load(f)
+        print(f"  📂 Inhalte geladen aus: {args.json_file}")
 
     generate_demo(
         name=args.name,
@@ -454,7 +481,8 @@ def main():
         address=args.address,
         extra=args.extra,
         higgsfield_video=args.video,
-        deploy=args.deploy
+        deploy=args.deploy,
+        preloaded_content=extra_content
     )
 
 
