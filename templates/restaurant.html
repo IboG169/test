@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{BUSINESS_NAME}} – {{CITY}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: {{COLOR_PRIMARY}};
+      --dark: #0d0d0d;
+      --warm: #1a1208;
+      --light: #f5f0e8;
+      --text: #e8dcc8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero video, .hero .hero-fallback {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .hero-fallback {
+      background: linear-gradient(135deg, #1a0a00 0%, #3d1f00 40%, #1a0800 100%);
+      animation: ambience 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambience {
+      from { filter: brightness(0.8) saturate(1.2); }
+      to { filter: brightness(1.1) saturate(1.5); }
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.8) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+    }
+
+    .hero-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 700;
+      line-height: 1.05;
+      color: #fff;
+      opacity: 0;
+      animation: fadeUp 1s 0.6s forwards;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.75);
+      margin-top: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s forwards;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      margin-top: 2.5rem;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: var(--dark);
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      opacity: 0;
+      animation: fadeUp 1s 1.2s forwards;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .hero-cta:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── ÜBER UNS ── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 60vh;
+    }
+
+    .about-img {
+      background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80') center/cover;
+      min-height: 400px;
+    }
+
+    .about-text {
+      background: var(--warm);
+      padding: 5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-text p {
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(232,220,200,0.8);
+      max-width: 480px;
+    }
+
+    /* ── MENU / HIGHLIGHTS ── */
+    .menu {
+      padding: 6rem 2rem;
+      background: var(--dark);
+      text-align: center;
+    }
+
+    .menu h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-subtitle {
+      color: rgba(232,220,200,0.6);
+      font-weight: 300;
+      margin-bottom: 4rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .menu-card {
+      background: var(--warm);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .menu-card:hover { transform: translateY(-4px); }
+
+    .menu-card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .menu-card-body { padding: 1.5rem; }
+
+    .menu-card-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-card-body p {
+      font-size: 0.9rem;
+      color: rgba(232,220,200,0.65);
+      line-height: 1.6;
+    }
+
+    .menu-card-price {
+      color: var(--gold);
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-top: 1rem;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      background: var(--gold);
+      padding: 4rem 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      text-align: center;
+      gap: 2rem;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      color: var(--dark);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: rgba(13,13,13,0.7);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+    }
+
+    /* ── KONTAKT ── */
+    .contact {
+      background: var(--warm);
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+
+    .contact h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-bottom: 1rem;
+    }
+
+    .contact p {
+      font-weight: 300;
+      color: rgba(232,220,200,0.7);
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      border-radius: 2px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    .btn-primary { background: var(--gold); color: var(--dark); }
+
+    .btn-outline {
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+
+    .contact-info {
+      margin-top: 3rem;
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      color: rgba(232,220,200,0.5);
+      font-size: 0.9rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080808;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .about { grid-template-columns: 1fr; }
+      .about-img { min-height: 250px; }
+      .about-text { padding: 3rem 1.5rem; }
+      .stats { grid-template-columns: 1fr; gap: 1.5rem; padding: 3rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  {{VIDEO_TAG}}
+  <div class="hero-content">
+    <p class="hero-label">{{CITY}} · Seit {{YEAR}}</p>
+    <h1>{{BUSINESS_NAME}}</h1>
+    <p class="hero-sub">{{TAGLINE}}</p>
+    <a href="#kontakt" class="hero-cta">Tisch reservieren</a>
+  </div>
+</section>
+
+<!-- ÜBER UNS -->
+<section class="about" id="ueber-uns">
+  <div class="about-img"></div>
+  <div class="about-text">
+    <p class="section-label">Unsere Geschichte</p>
+    <h2>Leidenschaft auf dem Teller</h2>
+    <p>{{ABOUT_TEXT}}</p>
+  </div>
+</section>
+
+<!-- MENU-HIGHLIGHTS -->
+<section class="menu" id="speisekarte">
+  <p class="section-label">Unsere Empfehlungen</p>
+  <h2>Kulinarische Highlights</h2>
+  <p class="menu-subtitle">Frische Zutaten, authentische Rezepte</p>
+  <div class="menu-grid">
+    <div class="menu-card">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80" alt="Gericht 1">
+      <div class="menu-card-body">
+        <h3>{{DISH_1_NAME}}</h3>
+        <p>{{DISH_1_DESC}}</p>
+        <p class="menu-card-price">{{DISH_1_PRICE}}</p>
+      </div>
+    </div>
+    <div class="menu-card">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80" alt="Gericht 2">
+      <div class="menu-card-body">
+        <h3>{{DISH_2_NAME}}</h3>
+        <p>{{DISH_2_DESC}}</p>
+        <p class="menu-card-price">{{DISH_2_PRICE}}</p>
+      </div>
+    </div>
+    <div class="menu-card">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="Gericht 3">
+      <div class="menu-card-body">
+        <h3>{{DISH_3_NAME}}</h3>
+        <p>{{DISH_3_DESC}}</p>
+        <p class="menu-card-price">{{DISH_3_PRICE}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div>
+    <div class="stat-num">{{STAT_1_NUM}}</div>
+    <div class="stat-label">{{STAT_1_LABEL}}</div>
+  </div>
+  <div>
+    <div class="stat-num">{{STAT_2_NUM}}</div>
+    <div class="stat-label">{{STAT_2_LABEL}}</div>
+  </div>
+  <div>
+    <div class="stat-num">{{STAT_3_NUM}}</div>
+    <div class="stat-label">{{STAT_3_LABEL}}</div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section class="contact" id="kontakt">
+  <p class="section-label">Besuchen Sie uns</p>
+  <h2>Tisch reservieren</h2>
+  <p>Wir freuen uns auf Ihren Besuch. Reservieren Sie jetzt Ihren Tisch oder schreiben Sie uns.</p>
+  <div class="contact-links">
+    <a href="tel:{{PHONE}}" class="btn btn-primary">{{PHONE}}</a>
+    <a href="mailto:{{EMAIL}}" class="btn btn-outline">E-Mail senden</a>
+  </div>
+  <div class="contact-info">
+    <span>{{ADDRESS}}</span>
+    <span>Mo–Sa {{HOURS}}</span>
+  </div>
+</section>
+
+<footer>
+  © {{YEAR}} {{BUSINESS_NAME}} · {{ADDRESS}}
+</footer>
+
+</body>
+</html>

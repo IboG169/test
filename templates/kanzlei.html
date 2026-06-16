@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{BUSINESS_NAME}} – {{FACHGEBIET}} in {{CITY}}</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: {{COLOR_PRIMARY}};
+      --navy-light: {{COLOR_SECONDARY}};
+      --gold: #c9a96e;
+      --bg: #f8f7f4;
+      --dark: #1a1c22;
+      --text: #3a3d47;
+      --muted: #7a7d88;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(248,247,244,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 1.25rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-logo-mark {
+      width: 36px; height: 36px;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'EB Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .nav-name {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--dark);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--navy); }
+
+    .nav-cta {
+      background: var(--navy) !important;
+      color: #fff !important;
+      padding: 0.65rem 1.5rem;
+      border-radius: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 4rem 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 45%;
+      height: 100%;
+      background: var(--navy-light);
+      clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .hero video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.15;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--navy);
+      opacity: 0.85;
+      z-index: 1;
+      display: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 650px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 0.4rem 1rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 500;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 span { color: var(--gold); }
+
+    .hero-sub {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.8;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn-gold { background: var(--gold); color: var(--dark); }
+    .btn-outline-white { border: 1px solid rgba(255,255,255,0.3); color: #fff; }
+
+    /* ── FACHGEBIETE ── */
+    .expertise {
+      background: #fff;
+      padding: 6rem 4rem;
+    }
+
+    .section-header { text-align: center; margin-bottom: 4rem; }
+
+    .overline {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .section-header h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .expertise-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1px;
+      background: #e8e6e1;
+      border: 1px solid #e8e6e1;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .expertise-item {
+      background: #fff;
+      padding: 2.5rem;
+      transition: background 0.3s;
+    }
+
+    .expertise-item:hover { background: var(--bg); }
+
+    .expertise-num {
+      font-family: 'EB Garamond', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .expertise-item h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .expertise-item p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── ÜBER UNS ── */
+    .about {
+      background: var(--bg);
+      padding: 6rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .about-text .overline { margin-bottom: 1.5rem; }
+
+    .about-text h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 500;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-credentials {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .credential {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--dark);
+    }
+
+    .credential::before {
+      content: '';
+      width: 24px; height: 2px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .about-img {
+      background: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=700&q=80') center/cover;
+      min-height: 450px;
+      border-radius: 2px;
+    }
+
+    /* ── KONTAKT ── */
+    .contact {
+      background: var(--navy);
+      padding: 6rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .contact-text h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .contact-text p {
+      color: rgba(255,255,255,0.55);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-item-icon {
+      width: 40px; height: 40px;
+      background: rgba(201,169,110,0.15);
+      border: 1px solid rgba(201,169,110,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-info { font-size: 0.9rem; }
+    .contact-item-label { color: var(--gold); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.25rem; }
+    .contact-item-value { color: #fff; font-weight: 500; }
+
+    .contact-item-value a { color: #fff; text-decoration: none; }
+
+    footer {
+      background: #0d1018;
+      padding: 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.2);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .expertise { padding: 4rem 1.5rem; }
+      .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 2rem; }
+      .about-img { min-height: 250px; order: -1; }
+      .contact { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+      footer { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-mark">{{INITIALS}}</div>
+    <span class="nav-name">{{BUSINESS_NAME}}</span>
+  </div>
+  <div class="nav-links">
+    <a href="#fachgebiete">Fachgebiete</a>
+    <a href="#ueber-uns">Über uns</a>
+    <a href="#kontakt" class="nav-cta">Kontakt</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  {{VIDEO_TAG}}
+  <div class="hero-content">
+    <div class="hero-badge">{{FACHGEBIET}} · {{CITY}}</div>
+    <h1>Ihr Recht.<br><span>Unsere Stärke.</span></h1>
+    <p class="hero-sub">{{TAGLINE}}</p>
+    <div class="hero-btns">
+      <a href="#kontakt" class="btn btn-gold">Beratungsgespräch vereinbaren</a>
+      <a href="#fachgebiete" class="btn btn-outline-white">Unsere Fachgebiete</a>
+    </div>
+  </div>
+</section>
+
+<!-- FACHGEBIETE -->
+<section class="expertise" id="fachgebiete">
+  <div class="section-header">
+    <p class="overline">Unsere Kompetenz</p>
+    <h2>Fachgebiete</h2>
+  </div>
+  <div class="expertise-grid">
+    <div class="expertise-item">
+      <div class="expertise-num">01</div>
+      <h3>{{AREA_1_NAME}}</h3>
+      <p>{{AREA_1_DESC}}</p>
+    </div>
+    <div class="expertise-item">
+      <div class="expertise-num">02</div>
+      <h3>{{AREA_2_NAME}}</h3>
+      <p>{{AREA_2_DESC}}</p>
+    </div>
+    <div class="expertise-item">
+      <div class="expertise-num">03</div>
+      <h3>{{AREA_3_NAME}}</h3>
+      <p>{{AREA_3_DESC}}</p>
+    </div>
+    <div class="expertise-item">
+      <div class="expertise-num">04</div>
+      <h3>{{AREA_4_NAME}}</h3>
+      <p>{{AREA_4_DESC}}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ÜBER UNS -->
+<section id="ueber-uns">
+  <div class="about">
+    <div class="about-text">
+      <p class="overline">Über uns</p>
+      <h2>{{ABOUT_HEADLINE}}</h2>
+      <p>{{ABOUT_TEXT_1}}</p>
+      <p>{{ABOUT_TEXT_2}}</p>
+      <div class="about-credentials">
+        <div class="credential">{{CREDENTIAL_1}}</div>
+        <div class="credential">{{CREDENTIAL_2}}</div>
+        <div class="credential">{{CREDENTIAL_3}}</div>
+      </div>
+    </div>
+    <div class="about-img"></div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section class="contact" id="kontakt">
+  <div class="contact-text">
+    <p class="overline" style="color: var(--gold);">Erstberatung</p>
+    <h2>Sprechen Sie mit uns.</h2>
+    <p>Wir nehmen uns Zeit für Ihr Anliegen. Vereinbaren Sie jetzt Ihr erstes Beratungsgespräch — vertraulich und unverbindlich.</p>
+  </div>
+  <div class="contact-details">
+    <div class="contact-item">
+      <div class="contact-item-icon">📞</div>
+      <div class="contact-item-info">
+        <div class="contact-item-label">Telefon</div>
+        <div class="contact-item-value"><a href="tel:{{PHONE}}">{{PHONE}}</a></div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-icon">✉️</div>
+      <div class="contact-item-info">
+        <div class="contact-item-label">E-Mail</div>
+        <div class="contact-item-value"><a href="mailto:{{EMAIL}}">{{EMAIL}}</a></div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-icon">📍</div>
+      <div class="contact-item-info">
+        <div class="contact-item-label">Adresse</div>
+        <div class="contact-item-value">{{ADDRESS}}</div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-icon">🕐</div>
+      <div class="contact-item-info">
+        <div class="contact-item-label">Sprechzeiten</div>
+        <div class="contact-item-value">{{HOURS}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© {{YEAR}} {{BUSINESS_NAME}} · Alle Rechte vorbehalten</span>
+  <span>{{ADDRESS}}</span>
+</footer>
+
+</body>
+</html>
